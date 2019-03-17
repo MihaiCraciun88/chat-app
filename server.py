@@ -26,7 +26,7 @@ class Server:
 
             for connection in self.connections:
                 if not self.is_running:
-                    self.connections.remove(connection)
+                    connection.send(b'')
                     connection.close()
                     continue
 
