@@ -14,10 +14,14 @@ class Client:
         inputThread.start()
 
         while True:
-            data = self.sock.recv(1024)
-            if not data:
+            try:
+                data = self.sock.recv(1024)
+                if not data:
+                    break
+                print(str(data, 'utf-8'))
+            except Exception:
+                print('Connection closed')
                 break
-            print(str(data, 'utf-8'))
 
     def send(self):
         while True:

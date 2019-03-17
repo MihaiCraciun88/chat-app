@@ -14,20 +14,28 @@ class Server:
     def handler(self, conn, address):
         while True:
             data = conn.recv(1024)
-            # send to all clients except the one who send it
-            for connection in self.connections:
-                if self.get_id(connection) != self.get_id(conn):
-                    connection.send(data)
 
             if data == b'/stopserver':
                 self.is_running = False
-                data = b'/close'
-                self.sock.close()
 
             if data == b'/close':
                 print(self.get_id(conn) + ' disconnected')
                 self.connections.remove(conn)
                 conn.close()
+                break
+
+            for connection in self.connections:
+                if not self.is_running:
+                    self.connections.remove(connection)
+                    connection.close()
+                    continue
+
+                # send to all clients except the one who send it
+                if self.get_id(connection) != self.get_id(conn):
+                    connection.send(bytes(self.get_id(conn) + ': ', 'utf-8') + data)
+
+            if not self.is_running:
+                self.sock.close()
                 break
 
     def get_id(self, connection):
