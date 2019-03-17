@@ -14,18 +14,17 @@ class Server:
     def handler(self, conn, address):
         while True:
             data = conn.recv(1024)
-            data_decoded = str(data, 'utf-8')
             # send to all clients except the one who send it
             for connection in self.connections:
                 if self.get_id(connection) != self.get_id(conn):
                     connection.send(data)
 
-            if data_decoded == '/stopserv':
+            if data == b'/stopserver':
                 self.is_running = False
-                data_decoded = '/close'
+                data = b'/close'
                 self.sock.close()
 
-            if data_decoded == '/close':
+            if data == b'/close':
                 print(self.get_id(conn) + ' disconnected')
                 self.connections.remove(conn)
                 conn.close()
