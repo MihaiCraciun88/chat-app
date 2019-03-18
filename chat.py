@@ -2,7 +2,7 @@ import socket
 import threading
 
 
-class Client:
+class Chat:
     address = '127.0.0.1'
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
@@ -29,4 +29,4 @@ class Client:
 
 
 if __name__== '__main__':
-    client = Client()
+    chat = Chat()
