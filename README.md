@@ -5,6 +5,7 @@ https://spring-ws-chat.herokuapp.com/ doar ca in pyhton
 ## referinte:
 ```
 https://www.youtube.com/watch?v=D0SLpD7JvZI
+https://stuvel.eu/python-rsa-doc/usage.html#generating-keys
 ```
 
 ## de implementat:
