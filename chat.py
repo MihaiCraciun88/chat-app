@@ -1,3 +1,4 @@
+import sys
 import socket
 import threading
 
@@ -6,7 +7,9 @@ class Chat:
     address = '127.0.0.1'
     sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 
-    def __init__(self):
+    def __init__(self, address):
+        if address:
+            self.address = address
         self.sock.connect((self.address, 8888))
 
         inputThread = threading.Thread(target=self.send)
@@ -29,4 +32,7 @@ class Chat:
 
 
 if __name__== '__main__':
-    chat = Chat()
+    address = None
+    if len(sys.argv) > 1:
+        address = sys.argv[1]
+    chat = Chat(address)
