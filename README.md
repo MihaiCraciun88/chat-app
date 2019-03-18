@@ -1,5 +1,5 @@
 # chat-app
-eu ma gandeam la o aplicatie simple de comunicare gen messenger gen asta
+eu ma gandeam la o aplicatie simpla de comunicare gen cum e asta
 https://spring-ws-chat.herokuapp.com/ doar ca in pyhton
 
 ## referinte:
