@@ -1,5 +1,6 @@
 import socket
 import threading
+from includes import *
 
 
 class Server:
@@ -12,31 +13,28 @@ class Server:
         self.sock.listen(1)
 
     def handler(self, conn, address):
+        protocol = Protocol()
         while True:
-            data = conn.recv(1024)
+            data = protocol.receive(conn.recv(1024))
 
-            if data == b'/stopserver':
+            if data['message'] == '/stopserver':
+                for connection in self.connections:
+                    connection.send(protocol.send(Protocol.DISCONNECT, 0, ''))
                 self.is_running = False
+                self.sock.close()
+                break
 
-            if data == b'/close':
+            if data['message'] == '/close':
                 print(self.get_id(conn) + ' disconnected')
                 self.connections.remove(conn)
                 conn.close()
                 break
 
             for connection in self.connections:
-                if not self.is_running:
-                    connection.send(b'')
-                    connection.close()
-                    continue
-
                 # send to all clients except the one who send it
                 if self.get_id(connection) != self.get_id(conn):
-                    connection.send(bytes(self.get_id(conn) + ': ', 'utf-8') + data)
-
-            if not self.is_running:
-                self.sock.close()
-                break
+                    message = protocol.send(Protocol.CHAT, Protocol.PLAIN_TEXT, self.get_id(conn) + ': ' + data['message'])
+                    connection.send(message)
 
     def get_id(self, connection):
         address = connection.getpeername()
